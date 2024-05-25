@@ -1,0 +1,3 @@
+[submodule "ref_server"]
+	path = ref_server
+	url = https://github.com/NCCU-Stadium/server
