@@ -7,6 +7,13 @@
    docker compose up -d
    ```
 
+3. 依照需求可能需要更新submodule。這部分比較不確定，這裡提供幾個可能的指令：
+   ```sh
+   # 在根目錄中執行
+   git submodule update --init backend
+   git submodule update backend
+   ```
+
 3. 建立 tables
    ```sh
    cat ../backend/sql_src/createdb.sql | docker compose exec -T postgres psql --username postgres --dbname stadium
