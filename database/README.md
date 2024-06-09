@@ -8,6 +8,7 @@
    ```
 3. 打開http://localhost:5050/ 用env的帳密登入
    1. ![alt text](READMEimage/image.png)
+   2. ![alt text](READMEimage/image-1.png)
    3. ![alt text](READMEimage/image-2.png)
    4. Save點下去
    5. 左欄Servers/postgres/Databases/stadium/Schemas/public/Tables應該沒東西
