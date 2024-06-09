@@ -26,6 +26,10 @@
    cat ../backend/sql_src/createdb.sql | docker compose exec -T postgres psql --username postgres --dbname stadium
    ```
    執行這個指令應該會看到一堆的"ALTER TABLE"與"CREATE TABLE"。
+4. 讀入範例資料
+   ```sh
+   cat ./data.sql | docker compose exec -T postgres psql --username postgres --dbname stadium
+   ```
 5. 網頁重新整理。左欄Servers/postgres/Databases/stadium/Schemas/public/Tables會出現所有create的table  
    ![alt text](READMEimage/image-3.png)
 
@@ -33,4 +37,12 @@
    ```.env
    JWT_SECRET='your jwt secret'
    DATABASE_URL='postgres://postgres:password@localhost:5432/stadium'
+   ```
+
+5. 若想要重置database
+
+   ```sh
+   docker compose down
+   docker volume ls
+   docker volume rm <要刪除的volume>
    ```
