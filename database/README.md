@@ -26,7 +26,7 @@
    cat ../backend/sql_src/createdb.sql | docker compose exec -T postgres psql --username postgres --dbname stadium
    ```
    執行這個指令應該會看到一堆的"ALTER TABLE"與"CREATE TABLE"。
-   讀入範例資料
+4. 讀入範例資料
    ```sh
    cat ./data.sql | docker compose exec -T postgres psql --username postgres --dbname stadium
    ```
@@ -41,8 +41,8 @@
 
 5. 若想要重置database
 
-```sh
-docker compose down
-docker volume ls
-docker volume rm <要刪除的volume>
-```
+   ```sh
+   docker compose down
+   docker volume ls
+   docker volume rm <要刪除的volume>
+   ```
