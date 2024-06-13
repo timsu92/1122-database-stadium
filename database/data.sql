@@ -1,16 +1,16 @@
 -- Sample data for user_t with random passwords
-INSERT INTO "user_t" ("mail", "role", "phone", "pass", "point", "unpaid") VALUES 
-('user1@gmail.com', 'customer', '123-456-7890', 'a1b2c3d4e5f6', 10, 0),
-('user2@gmail.com', 'customer', '123-456-7891', 'p7q8r9s0t1u2', 20, 5),
-('user3@gmail.com', 'coach', '123-456-7892', 'v3w4x5y6z7a8', 30, 0),
-('user4@gmail.com', 'customer', '123-456-7893', 'n9o0p1q2r3s4', 40, 10),
-('user5@gmail.com', 'customer', '123-456-7894', 't5u6v7w8x9y0', 50, 15),
-('user6@gmail.com', 'coach', '123-456-7895', 'm1n2o3p4q5r6', 60, 0),
-('user7@gmail.com', 'customer', '123-456-7896', 'l7m8n9o0p1q2', 70, 20),
-('user8@gmail.com', 'customer', '123-456-7897', 'u3v4w5x6y7z8', 80, 25);
+INSERT INTO "user_t" ("mail", "role", "phone", "pass", "point", "unpaid") VALUES
+('user1@gmail.com', 'customer', '123-456-7890', '$2b$10$/A2V1zmtyLlW./JyEFd5l.f2dUIwM2tJalovpet8gOVBY5YDG.h.C', 10, 0),
+('user2@gmail.com', 'customer', '123-456-7891', '$2b$10$yo2H0vp4odPUsD8K1W.BCOz8VRvRTQspI2WrpT5TkaGilqJLiEYYm', 20, 5),
+('user3@gmail.com', 'coach', '123-456-7892', '$2b$10$Qz.liaJbH76p1/41uczfOeMNOQfd/Y2fHpiPA7PX5TwI9yb44beNa', 30, 0),
+('user4@gmail.com', 'customer', '123-456-7893', '$2b$10$QBB/mlBqVIqZPkljjd6WWOPPPX.pgfp8FBzku1V2HouDOEn8Kwv5u', 40, 10),
+('user5@gmail.com', 'customer', '123-456-7894', '$2b$10$NPqqObGXWstqLzQHCgx6CuwM.YZLK0FWbDbf/QyGcaGgs/ebCORQC', 50, 15),
+('user6@gmail.com', 'coach', '123-456-7895', '$2b$10$V4I01Nq9XSH2pufUehfNm.6EEZjWsrKS63oAlP5S.O.Oxxz1YH1HC', 60, 0),
+('user7@gmail.com', 'customer', '123-456-7896', '$2b$10$JyCttPLU9/6.mkkdVF48sOkZ/UiI7XYnbYtK0nERsZbgax57..pCW', 70, 20),
+('user8@gmail.com', 'customer', '123-456-7897', '$2b$10$bIbvVFDHfoEDxT6UIx5ThONIzBTDB0otoVOPYx0bMawJIlnCjKdDq', 80, 25);
 
 -- Sample data for product_t
-INSERT INTO "product_t" ("name", "brand", "price", "desc", "imgurl") VALUES 
+INSERT INTO "product_t" ("name", "brand", "price", "desc", "imgurl") VALUES
 ('Product A', 'Brand X', 100, 'Description of Product A', ARRAY['img1.jpg', 'img2.jpg']),
 ('Product B', 'Brand Y', 150, 'Description of Product B', ARRAY['img3.jpg', 'img4.jpg']),
 ('Product C', 'Brand Z', 200, 'Description of Product C', ARRAY['img5.jpg', 'img6.jpg']),
@@ -21,7 +21,7 @@ INSERT INTO "product_t" ("name", "brand", "price", "desc", "imgurl") VALUES
 ('Product H', 'Brand Y', 170, 'Description of Product H', ARRAY['img15.jpg', 'img16.jpg']);
 
 -- Sample data for productStore_t
-INSERT INTO "productStore_t" ("product_id", "size", "color", "count", "sold") VALUES 
+INSERT INTO "productStore_t" ("product_id", "size", "color", "count", "sold") VALUES
 ((SELECT "id" FROM "product_t" WHERE "name" = 'Product A'), 'M', 'Red', 10, 5),
 ((SELECT "id" FROM "product_t" WHERE "name" = 'Product B'), 'L', 'Blue', 15, 7),
 ((SELECT "id" FROM "product_t" WHERE "name" = 'Product C'), 'S', 'Green', 20, 10),
@@ -32,7 +32,7 @@ INSERT INTO "productStore_t" ("product_id", "size", "color", "count", "sold") VA
 ((SELECT "id" FROM "product_t" WHERE "name" = 'Product H'), 'L', 'Orange', 45, 22);
 
 -- Sample data for cart_t
-INSERT INTO "cart_t" ("user_mail", "isdone") VALUES 
+INSERT INTO "cart_t" ("user_mail", "isdone") VALUES
 ('user1@gmail.com', false),
 ('user2@gmail.com', false),
 ('user3@gmail.com', true),
@@ -43,7 +43,7 @@ INSERT INTO "cart_t" ("user_mail", "isdone") VALUES
 ('user8@gmail.com', false);
 
 -- Sample data for cart_contain_product
-INSERT INTO "cart_contain_product" ("cart_id", "product_id", "size", "color", "count") VALUES 
+INSERT INTO "cart_contain_product" ("cart_id", "product_id", "size", "color", "count") VALUES
 ((SELECT "id" FROM "cart_t" WHERE "user_mail" = 'user1@gmail.com'), (SELECT "id" FROM "product_t" WHERE "name" = 'Product A'), 'M', 'Red', 2),
 ((SELECT "id" FROM "cart_t" WHERE "user_mail" = 'user2@gmail.com'), (SELECT "id" FROM "product_t" WHERE "name" = 'Product B'), 'L', 'Blue', 1),
 ((SELECT "id" FROM "cart_t" WHERE "user_mail" = 'user3@gmail.com'), (SELECT "id" FROM "product_t" WHERE "name" = 'Product C'), 'S', 'Green', 3),
@@ -54,7 +54,7 @@ INSERT INTO "cart_contain_product" ("cart_id", "product_id", "size", "color", "c
 ((SELECT "id" FROM "cart_t" WHERE "user_mail" = 'user8@gmail.com'), (SELECT "id" FROM "product_t" WHERE "name" = 'Product H'), 'L', 'Orange', 3);
 
 -- Sample data for course_t
-INSERT INTO "course_t" ("timeslot", "weekday", "coursetype", "duration", "title", "weeks", "max", "content", "startday", "timeidx", "fee") VALUES 
+INSERT INTO "course_t" ("timeslot", "weekday", "coursetype", "duration", "title", "weeks", "max", "content", "startday", "timeidx", "fee") VALUES
 (1, 'Monday', 'Yoga', 60, 'Morning Yoga', 8, 20, 'Yoga course for beginners', '2023-06-01', ARRAY[1,2], 50),
 (2, 'Wednesday', 'Pilates', 45, 'Pilates Intermediate', 6, 15, 'Intermediate level Pilates', '2023-06-03', ARRAY[3,4], 40),
 (3, 'Friday', 'HIIT', 30, 'HIIT Advanced', 10, 10, 'High-intensity interval training', '2023-06-05', ARRAY[5,6], 60),
@@ -65,7 +65,7 @@ INSERT INTO "course_t" ("timeslot", "weekday", "coursetype", "duration", "title"
 (8, 'Monday', 'Cardio', 60, 'Cardio Blast', 8, 20, 'High-intensity cardio workout', '2023-06-08', ARRAY[15,16], 50);
 
 -- Sample data for subuser_t
-INSERT INTO "subuser_t" ("user_mail", "avatar", "name", "gender", "birth") VALUES 
+INSERT INTO "subuser_t" ("user_mail", "avatar", "name", "gender", "birth") VALUES
 ('user1@gmail.com', 'avatar1.png', 'Subuser1', 'Male', '2010-01-01'),
 ('user2@gmail.com', 'avatar2.png', 'Subuser2', 'Female', '2012-02-02'),
 ('user3@gmail.com', 'avatar3.png', 'Subuser3', 'Male', '2011-03-03'),
@@ -76,7 +76,7 @@ INSERT INTO "subuser_t" ("user_mail", "avatar", "name", "gender", "birth") VALUE
 ('user8@gmail.com', 'avatar8.png', 'Subuser8', 'Female', '2013-08-08');
 
 -- Sample data for user_take_course_t
-INSERT INTO "user_take_course_t" ("user_mail", "user_name", "course_id", "leave_count") VALUES 
+INSERT INTO "user_take_course_t" ("user_mail", "user_name", "course_id", "leave_count") VALUES
 ('user1@gmail.com', 'Subuser1', (SELECT "id" FROM "course_t" WHERE "title" = 'Morning Yoga'), 0),
 ('user2@gmail.com', 'Subuser2', (SELECT "id" FROM "course_t" WHERE "title" = 'Pilates Intermediate'), 1),
 ('user3@gmail.com', 'Subuser3', (SELECT "id" FROM "course_t" WHERE "title" = 'HIIT Advanced'), 2),
@@ -86,7 +86,7 @@ INSERT INTO "user_take_course_t" ("user_mail", "user_name", "course_id", "leave_
 ('user7@gmail.com', 'Subuser7', (SELECT "id" FROM "course_t" WHERE "title" = 'Meditation Basics'), 0),
 ('user8@gmail.com', 'Subuser8', (SELECT "id" FROM "course_t" WHERE "title" = 'Cardio Blast'), 1);
 
--- Sample data for activity_t 
+-- Sample data for activity_t
 INSERT INTO "activity_t" ("title", "content") VALUES
 ('Yoga Session', 'Join us for a morning yoga session to relax and rejuvenate.'),
 ('Cooking Class', 'Learn to cook delicious meals with our expert chef.'),
