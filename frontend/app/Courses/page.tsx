@@ -11,85 +11,137 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
- 
-const invoices = [
+import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+const courses = [
   {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
+    course: "Course001",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$250.00",
+    coachs: ["Sebastian", "Melody"]
   },
   {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
+    course: "Course002",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$150.00",
+    coachs: ["Sebastian", "Melody"]
   },
   {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
+    course: "Course003",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$350.00",
+    coachs: ["Sebastian", "Melody"]
   },
   {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
+    course: "Course004",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$450.00",
+    coachs: ["Sebastian", "Melody"]
   },
   {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
+    course: "Course005",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$550.00",
+    coachs: ["Sebastian", "Kevin"]
   },
   {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
+    course: "Course006",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$200.00",
+    coachs: ["Sebastian", "Melody"]
   },
   {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
+    course: "Course007",
+    startDate: "2023-06-21",
+    timeSlot: "3:00-4:00",
+    weekDay: "Monday",
+    weeks: 4,
+    courseType: "group",
+    content: "",
+    Price: "$300.00",
+    coachs: ["Sebastian", "Melody"]
   },
 ]
-export default function Courses(){
-  return(
+export default function Courses() {
+  return (
     <>
       <h1>Courses page</h1>
+      <br/>
       <h2>
-        <Link href="/">Back to home</Link>
+        <Button asChild>
+          <Link href="/">Back to home</Link>
+        </Button>
       </h2>
+      <br/>
       <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        <TableCaption>A list of recent courses.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Course</TableHead>
+            <TableHead className="text-center">Start Date</TableHead>
+            <TableHead className="text-center">Week Day</TableHead>
+            <TableHead className="text-center">Time Slot</TableHead>
+            <TableHead className="text-center">Weeks</TableHead>
+            <TableHead className="text-center">coachs</TableHead>
+            <TableHead className="text-center">Type</TableHead>
+            <TableHead className="text-right">Price</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
+        </TableHeader>
+        <TableBody>
+          {courses.map((course) => (
+            <TableRow key={course.course}>
+              <TableCell className="font-medium " >{course.course}</TableCell>
+              <TableCell className="text-center">{course.startDate}</TableCell>
+              <TableCell className="text-center">{course.weekDay}</TableCell>
+              <TableCell className="text-center">{course.timeSlot}</TableCell>
+              <TableCell className="text-center">{course.weeks}</TableCell>
+              <TableCell className="text-center">{course.coachs.map((coach, index) => {
+                if (index != course.coachs.length - 1) return `${coach}, `
+                else return `${coach}`
+              })}
+              </TableCell>
+              <TableCell className="text-center">{course.courseType}</TableCell>
+              <TableCell className="text-right">{course.Price}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableFooter>
+          {/* <TableRow>
+          <TableCell colSpan={4}>Total</TableCell>
           <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableRow> */}
+        </TableFooter>
+      </Table>
     </>
   )
 }
