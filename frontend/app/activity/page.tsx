@@ -103,8 +103,8 @@ async function get_all_activity() {
 export default function ActivityPage() {
     return (
         <>
-            <div className='h-full flex flex-col items-center justify-center'>
-                ActivityPage
+            <div className='h-full flex flex-col items-center justify-center text-3xl'>
+                Activity Page
                 <Carousel
                     opts={{
                         align: "start",
