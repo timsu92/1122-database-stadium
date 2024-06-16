@@ -1,11 +1,37 @@
 'use client'
+import Image from 'next/image'
 import Link from 'next/link'
-import { Fragment, useState, useEffect } from 'react'
-import CartPage from './cart'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+import { MoreHorizontal, PlusCircle } from 'lucide-react'
 import InfoPage from './info'
+import CartPage from './cart'
+import NewProduct from './add'
+import Edit from './edit'
+import { Button } from '@/components/ui/button'
+
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export interface Product_t {
-  _id: string
+  id: string
   name: string
   brand: string
   price: number
@@ -14,43 +40,48 @@ export interface Product_t {
 }
 const productTemp: Product_t[] = [
   {
-    _id: '1',
+    id: '1',
     name: 'Earthen Bottle',
-    brand: '',
+    brand: 'qwe',
     price: 48,
     desc: '',
     imgurl: [
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
+      '',
+
+      //'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
     ],
   },
   {
-    _id: '2',
+    id: '2',
     name: 'Machined Mechanical Pencil',
-    brand: '',
+    brand: 'dev',
     price: 200,
     desc: '',
     imgurl: [
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
+      '',
+      //'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
     ],
   },
   {
-    _id: '3',
+    id: '3',
     name: 'Earthen Bottle',
-    brand: '',
+    brand: 'abc',
     price: 100,
     desc: '',
     imgurl: [
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
+      '',
+      // 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
     ],
   },
   {
-    _id: '4',
+    id: '4',
     name: 'Machined Mechanical Pencil',
-    brand: '',
+    brand: 'brand',
     price: 450,
     desc: '',
     imgurl: [
-      'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+      '',
+      // 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
     ],
   },
 
@@ -65,66 +96,115 @@ async function getCartId() {
   // }
   return cart_id
 }
-
-export default function Product() {
-  const [open, setOpen] = useState(false)
-  const [showInfo, setShowInfo] = useState(false)
+async function deleteProduct(id: string) {
+  const res = await axios.delete(`http://localhost:8080/shops/products/${id}`)
+  if (res.data.message == 'Delete product successfully') {
+    return
+  } else {
+    console.log(res)
+  }
+}
+export default function Dashboard() {
   const [products, setProducts] = useState<Product_t[]>([])
   const [selectProduct, setSelectProduct] = useState<Product_t>(productTemp[0])
 
   useEffect(() => {
     const getProducts = async () => {
+      // const res = await fetch('http://localhost:8080/shops/products')
+      const data = await axios.get('http://localhost:8080/shops/products')
+      console.log(data.data)
+      console.log(data.data.productList)
       // const { data } = await axios.get(`${API_URL}/shop/product`)
-      // setProducts(data)
+      setProducts(data.data.productList)
+      console.log(products)
     }
     getProducts()
   }, [])
+
   return (
-    <>
-      <h1>Product page</h1>
-      <h2>
-        <Link href="/">Back to home</Link>
-      </h2>
-
-      <button onClick={() => setOpen(!open)}>
-        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-          open cart
-        </span>
-      </button>
-      <CartPage open={open} setOpen={setOpen} cart_id={''} />
-      <InfoPage open={showInfo} setOpen={setShowInfo} product={selectProduct} cart_id={''}/>
-      <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <h2 className="sr-only">Products</h2>
-
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-            {productTemp.map((product) => (
-              <a key={product._id} href={'#'} className="group">
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                  <img
-                    src={product.imgurl[0]}
-                    className="h-full w-full object-cover object-center group-hover:opacity-75"
-                  />
-                </div>
-                <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-                <p className="mt-1 text-lg font-medium text-gray-900">
-                  ${product.price}
-                </p>
-                <button
-                  onClick={() => {
-                    setShowInfo(!showInfo)
-                    setSelectProduct(product)
-                  }}
-                >
-                  <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                    show info
-                  </span>
-                </button>
-              </a>
-            ))}
+    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <div className="ml-auto flex items-center gap-2">
+            <CartPage />
+            <NewProduct />
           </div>
-        </div>
+          <Card x-chunk="dashboard-06-chunk-0">
+            <CardHeader>
+              <CardTitle>Products</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="hidden w-[100px] sm:table-cell">
+                      <span className="sr-only">Image</span>
+                    </TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Price
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Brand
+                    </TableHead>
+                    <TableHead>
+                      <span className="sr-only">Buy</span>
+                    </TableHead>
+                    <TableHead>
+                      <span className="sr-only">Actions</span>
+                    </TableHead>
+                    <TableHead>
+                      <span className="sr-only">Actions</span>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {products.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell className="hidden sm:table-cell">
+                        <Image
+                          alt={''}
+                          className="aspect-square rounded-md object-cover"
+                          height={64}
+                          src={''}
+                          width={64}
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {product.name}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        ${product.price}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {product.brand}
+                      </TableCell>
+                      <TableCell>
+                        <InfoPage product={product} />
+                      </TableCell>
+                      <TableCell>
+                        <Edit />
+                      </TableCell>
+
+                      <TableCell>
+                        <Button
+                          variant="destructive"
+                          onClick={() => {
+                            deleteProduct(product.id)
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </main>
       </div>
-    </>
+    </div>
   )
 }
