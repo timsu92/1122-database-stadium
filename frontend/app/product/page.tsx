@@ -108,18 +108,18 @@ export default function Dashboard() {
   const [products, setProducts] = useState<Product_t[]>([])
   const [selectProduct, setSelectProduct] = useState<Product_t>(productTemp[0])
 
-  useEffect(() => {
-    const getProducts = async () => {
-      // const res = await fetch('http://localhost:8080/shops/products')
-      const data = await axios.get('http://localhost:8080/shops/products')
-      console.log(data.data)
-      console.log(data.data.productList)
-      // const { data } = await axios.get(`${API_URL}/shop/product`)
-      setProducts(data.data.productList)
-      console.log(products)
-    }
-    getProducts()
-  }, [])
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     // const res = await fetch('http://localhost:8080/shops/products')
+  //     const data = await axios.get('http://localhost:8080/shops/products')
+  //     console.log(data.data)
+  //     console.log(data.data.productList)
+  //     // const { data } = await axios.get(`${API_URL}/shop/product`)
+  //     setProducts(data.data.productList)
+  //     console.log(products)
+  //   }
+  //   getProducts()
+  // }, [])
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
