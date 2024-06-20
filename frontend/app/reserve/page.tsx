@@ -3,9 +3,27 @@ import { useState, useEffect } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 
+import { Check, ChevronsUpDown } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "@/components/ui/command"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Sidebar } from '../sidebar/page'
+import axios from 'axios'
 
 import {
     Drawer,
@@ -18,6 +36,41 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer"
 
+const tableidss = [
+    {
+        value: "101",
+        label: "101",
+    },
+    {
+        value: "102",
+        label: "102",
+    },
+    {
+        value: "103",
+        label: "103",
+    },
+    {
+        value: "104",
+        label: "104",
+    },
+    {
+        value: "105",
+        label: "105",
+    },
+    {
+        value: "106",
+        label: "106",
+    },
+    {
+        value: "107",
+        label: "107",
+    },
+    {
+        value: "108",
+        label: "108",
+    },
+]
+
 interface Reserve {
     user_mail: string,
     usedtableid: number,
@@ -25,53 +78,94 @@ interface Reserve {
     timeidx: number
 }
 
-const reserves: Reserve[] = [
-    {
-        "user_mail": "dev@dev.com",
-        "usedtableid": 5,
-        "tabledate": "2024-06-01T16:00:00.000Z",
-        "timeidx": 5
-    }
-]
-
 export default function ReservePage() {
+    const [open_tableid, setOpen_tableid] = useState(false)
+    const [value, setValue] = useState("")
+
     const [timeIndex, setTimeIndex] = useState<string>('');
-    const [tableid, setTableid] = useState<number | undefined>();
+    // const [tableid, setTableid] = useState<string>('');
     const [date, setDate] = useState<Date | undefined>(new Date());
-    // const [reserves, setReserves] = useState<Reserve[]>([]);
-    // const [loading, setLoading] = useState<boolean>(true);
-    // const [error, setError] = useState<string | null>(null);
+    const [Reserves, setReserves] = useState<Reserve[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    useEffect(() => {
+        const jwtToken = localStorage.getItem('token');
+        console.log(jwtToken)
+        const fetchReserves = async () => {
+            try {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${jwtToken}`,
+                };
 
-    // useEffect(() => {
-    //     const fetchReserves = async () => {
-    //         try {
-    //             const response = await fetch('/api/reserves');
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             const data = await response.json();
-    //             setReserves(data);
-    //         } catch (error: unknown) {
-    //             if (error instanceof Error) {
-    //                 setError(error.message);
-    //             } else {
-    //                 setError('An unknown error occurred');
-    //             }
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
+                const start = '1989-06-01';
+                const endDate = new Date();
+                const end = endDate.toISOString().split('T')[0];
+                const params = {
+                    start: start,
+                    end: end
+                };
 
-    //     fetchReserves();
-    // }, []);
+                const res = await axios.get('http://localhost:8080/users/reserves', {
+                    headers: {
+                        Authorization: `${jwtToken}`,
+                    },
+                });
+                setReserves(res.data);
+                setLoading(false);
+                console.log('Response:', res.data);
+            } catch (error) {
+                console.error('Error:', error);
+                setError('Failed to fetch reserves');
+                setLoading(false);
+            }
+        };
 
-    // if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error}</div>;
+        fetchReserves();
+    }, []);
 
-    const handleSubmit = () => {
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Loading: {error}</div>;
+
+    async function handleSubmit() {
         console.log('Date:', date);
         console.log('Time Index:', timeIndex);
-        console.log('Table ID:', tableid);
+        console.log('Table ID:', value);
+        //console.log('test:', value)
+        const jwtToken = localStorage.getItem('token');
+        console.log(jwtToken)
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `${jwtToken}`,
+            };
+
+            const start = '1989-06-01';
+            const endDate = new Date();
+            const end = endDate.toISOString().split('T')[0];
+            const params = {
+                start: start,
+                end: end
+            };
+
+            const res = await axios.post('http://localhost:8080/users/reserves',
+                {
+                    date: date,
+                    tableid: value,
+                    timeidx: timeIndex
+                },
+                {
+                    headers: headers
+                });
+            //setReserves(res.data);
+            setLoading(false);
+            console.log('Response:', res.data);
+        } catch (error) {
+            console.error('Error:', error);
+            setError('Failed to fetch reserves');
+            setLoading(false);
+        }
+
     };
 
     return (
@@ -92,15 +186,58 @@ export default function ReservePage() {
                             placeholder="Time Index"
                             value={timeIndex}
                             onChange={(e) => setTimeIndex(e.target.value)}
-                            className="mt-4 p-2 border rounded"
+                            className="mt-4 p-1 border rounded"
                         />
-                        <input
+                        {/* <input
                             type="number"
                             placeholder="Table ID"
                             value={tableid !== undefined ? tableid : ''}
                             onChange={(e) => setTableid(parseInt(e.target.value))}
                             className="mt-4 p-2 border rounded"
-                        />
+                        /> */}
+                        <Popover open={open_tableid} onOpenChange={setOpen_tableid}>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    aria-expanded={open_tableid}
+                                    className="w-[200px] justify-between"
+                                >
+                                    {value
+                                        ? tableidss.find((tableids) => tableids.value === value)?.label
+                                        : "choose table..."}
+                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[200px] p-0">
+                                <Command>
+                                    <CommandInput placeholder="Search tableids..." />
+                                    <CommandList>
+                                        <CommandEmpty>No tableids found.</CommandEmpty>
+                                        <CommandGroup>
+                                            {tableidss.map((tableids) => (
+                                                <CommandItem
+                                                    key={tableids.value}
+                                                    value={tableids.value}
+                                                    onSelect={(currentValue) => {
+                                                        setValue(currentValue === value ? "" : currentValue)
+                                                        setOpen_tableid(false)
+                                                    }}
+                                                >
+                                                    <Check
+                                                        className={cn(
+                                                            "mr-2 h-4 w-4",
+                                                            value === tableids.value ? "opacity-100" : "opacity-0"
+                                                        )}
+                                                    />
+                                                    {tableids.label}
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </CommandList>
+                                </Command>
+                            </PopoverContent>
+                        </Popover>
                         <Button onClick={handleSubmit} className="mt-4">
                             Submit
                         </Button>
@@ -119,7 +256,7 @@ export default function ReservePage() {
                             <div className="items-center justify-center">
                                 <ScrollArea className="h-96 w-full rounded-md border mt-4">
                                     <div className="p-4">
-                                        {reserves.map((reserve, index) => (
+                                        {Reserves.map((reserve, index) => (
                                             <div key={index} className="text-sm">
                                                 <h1 className="text-lg">{reserve.user_mail}</h1>
                                                 <p className="text-slate-400">{reserve.tabledate}</p>

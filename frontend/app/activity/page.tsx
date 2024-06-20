@@ -32,69 +32,6 @@ interface Activity {
   time: string,
 }
 
-// const Activities: Activity[] = [
-//   {
-//       id: "1",
-//       title: 'Yoga Session',
-//       content: 'Join us for a morning yoga session to relax and rejuvenate.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "2",
-//       title: 'Cooking Class',
-//       content: 'Learn to cook delicious meals with our expert chef.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "3",
-//       title: 'Art Workshop',
-//       content: 'Unleash your creativity in our art workshop.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "4",
-//       title: 'Tech Talk',
-//       content: 'Join our tech talk to stay updated on the latest trends in technology.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "5",
-//       title: 'Music Concert',
-//       content: 'Enjoy live music from our talented local bands.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "6",
-//       title: 'Dance Class',
-//       content: 'Get moving with our energetic dance class.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "7",
-//       title: 'Book Club',
-//       content: 'Join our book club to discuss the latest bestsellers.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "8",
-//       title: 'Fitness Bootcamp',
-//       content: 'Push your limits with our intense fitness bootcamp.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "9",
-//       title: 'Gardening Workshop',
-//       content: 'Learn the basics of gardening in our hands-on workshop.',
-//       time: '2024-06-15T00:00:00Z'
-//   },
-//   {
-//       id: "10",
-//       title: 'Photography Walk',
-//       content: 'Capture stunning photos in our guided photography walk.',
-//       time: '2024-06-15T00:00:00Z'
-//   }
-// ]
-
 export default function ActivityPage() {
   const [Activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
