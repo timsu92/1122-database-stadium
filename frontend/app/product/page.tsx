@@ -28,77 +28,26 @@ export interface Product_t {
   desc: string
   imgurl: string[]
 }
-const productTemp: Product_t[] = [
-  {
-    id: '1',
-    name: 'Earthen Bottle',
-    brand: 'qwe',
-    price: 48,
-    desc: '',
-    imgurl: [
-      '',
-
-      //'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
-    ],
-  },
-  {
-    id: '2',
-    name: 'Machined Mechanical Pencil',
-    brand: 'dev',
-    price: 200,
-    desc: '',
-    imgurl: [
-      '',
-      //'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-    ],
-  },
-  {
-    id: '3',
-    name: 'Earthen Bottle',
-    brand: 'abc',
-    price: 100,
-    desc: '',
-    imgurl: [
-      '',
-      // 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
-    ],
-  },
-  {
-    id: '4',
-    name: 'Machined Mechanical Pencil',
-    brand: 'brand',
-    price: 450,
-    desc: '',
-    imgurl: [
-      '',
-      // 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
-    ],
-  },
-
-  // More products...
-]
-
 async function getCartId() {
   let cart_id = ''
-  // const data = await axios.get(`${API_URL}/user/cart/list`)
-  // if (no available cart){
-  //   //Create a new cart
-  // }
-  return cart_id
+  const data = await axios.get(`http://localhost:8080/users/carts/list`)
+  //Create a new cart
+  // return cart_id
 }
-async function deleteProduct(id: string) {
-  const res = await axios.delete(`http://localhost:8080/shops/products/${id}`)
+async function deleteProduct(id: string, jwtToken: string) {
+  const res = await axios.delete(`http://localhost:8080/shops/products/${id}`, {
+    headers: { Authorization: jwtToken },
+  })
   if (res.data.message == 'Delete product successfully') {
-    return
+    alert('Delete product successfully')
   } else {
     console.log(res)
   }
 }
-export default function Dashboard() {
+export default function Product() {
   const [products, setProducts] = useState<Product_t[]>([])
-  const [selectProduct, setSelectProduct] = useState<Product_t>(productTemp[0])
   const [jwtToken, setJwtToken] = useState('')
-
+  const [cart_id, setCart_id] = useState('')
   useEffect(() => {
     const login = async (email: string, password: string) => {
       const res = await axios.post('http://localhost:8080/auth/login', {
@@ -107,11 +56,23 @@ export default function Dashboard() {
       })
       console.log(res.data)
       setJwtToken(res.data.jwtToken)
+      // console.log(jwtToken)
+      // await axios.post('http://localhost:8080/users/carts/', null, {
+      //   headers: { Authorization: jwtToken }, // 将设置的头部信息传递给 Axios 请求配置
+      // })
+      //
+      // const data = await axios.get(`http://localhost:8080/users/carts/list`, {
+      //   headers: { Authorization: jwtToken },
+      // })
+      // console.log(data.data)
+      // if (data.data.Cart_List) {
+      //   setCart_id(data.data.Cart_List[0])
+      //   console.log(cart_id)
+      // }
     }
     login('admin', 'admin')
 
     const getProducts = async () => {
-      // const res = await fetch('http://localhost:8080/shops/products')
       const data = await axios.get('http://localhost:8080/shops/products')
       // console.log(data.data)
       // console.log(data.data.productList)
@@ -120,6 +81,19 @@ export default function Dashboard() {
       // console.log(products)
     }
     getProducts()
+
+    const getCart = async () => {
+      const data = await axios.get(`http://localhost:8080/users/carts/list`, {
+        headers: { Authorization: `${jwtToken}` },
+      })
+      if (data.data.Cart_List) {
+        setCart_id(data.data.Cart_List[0])
+        console.log(cart_id)
+      }
+      // console.log(data.data.Cart_List[0])
+    }
+
+    //getCart()
   }, [])
 
   return (
@@ -128,7 +102,7 @@ export default function Dashboard() {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <div className="ml-auto flex items-center gap-2">
-            <CartPage />
+            <CartPage jwtToken={jwtToken} />
             <NewProduct jwtToken={jwtToken} />
           </div>
           <Card x-chunk="dashboard-06-chunk-0">
@@ -202,7 +176,7 @@ export default function Dashboard() {
                         <Button
                           variant="destructive"
                           onClick={() => {
-                            deleteProduct(product.id)
+                            deleteProduct(product.id, jwtToken)
                           }}
                         >
                           Delete

@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
-
+import axios from 'axios'
 import {
   Sheet,
   SheetClose,
@@ -36,11 +36,6 @@ const temp: CartData[] = [
     count: 1,
   },
 ]
-interface CartProps {
-  open: boolean
-  setOpen: (open: boolean) => void
-  cart_id: string
-}
 
 interface Cart {
   name: string
@@ -74,16 +69,23 @@ const productTemp: Cart[] = [
   },
   // More products...
 ]
+export interface cartProps {
+  jwtToken: string
+}
 
-// const CartPage: React.FC<CartProps> = ({ open, setOpen, cart_id }) => {
-const CartPage = () => {
-  useEffect(() => {
-    const getCart = async () => {
-      // const { data } = await axios.get(`${API_URL}/user/cart/${cart_id}`)
-      // setCart(data)
+const CartPage: React.FC<cartProps> = ({ jwtToken }) => {
+  // console.log(jwtToken)
+  const [cart_id, setCart_id] = useState('')
+  const getCart = async () => {
+    const data = await axios.get(`http://localhost:8080/users/carts/list`, {
+      headers: { Authorization: `${jwtToken}` },
+    })
+    if (data.data.Cart_List) {
+      setCart_id(data.data.Cart_List[0])
+      console.log(cart_id)
     }
-    //getCart()
-  }, [])
+    // console.log(data.data.Cart_List[0])
+  }
   async function removeFromCart(cart_id: string) {
     //
     //await axios.delete(`${API_URL}/user/cart`)
@@ -93,7 +95,14 @@ const CartPage = () => {
     <>
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline">Open Cart</Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              getCart()
+            }}
+          >
+            Open Cart
+          </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
