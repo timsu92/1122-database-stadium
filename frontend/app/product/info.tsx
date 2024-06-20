@@ -61,33 +61,18 @@ async function addToCart(product: ProductStore_t, cart_id: string) {
   //await axios.post(`${API_URL}/user/cart/add`)
 }
 
-//const InfoPage = () => {
 const InfoPage: React.FC<InfoProps> = ({ product }) => {
   const productid = product.id
-  console.log(product.id)
+  // console.log(product.id)
 
   const [select, setSelect] = useState(0)
   const [info, setInfo] = useState<ProductStore_t[]>([])
 
-  useEffect(() => {
-    const getProducts = async () => {
-      // const res = await fetch('http://localhost:8080/shops/products')
-      const data = await axios.get(
-        `http://localhost:8080/shops/products:${productid}`
-      )
-      console.log(data.data)
-      console.log(data.data.productInfoList)
-      // const { data } = await axios.get(`${API_URL}/shop/product`)
-      setInfo(data.data.productInfoList)
-      // console.log(products)
-    }
-    //getProducts()
-  }, [])
   const getInfo = async (id: string) => {
     // const res = await fetch('http://localhost:8080/shops/products')
     const data = await axios.get(`http://localhost:8080/shops/products/${id}`)
-    console.log(data.data)
-    console.log(data.data.productInfoList)
+    // console.log(data.data)
+    // console.log(data.data.productInfoList)
     // const { data } = await axios.get(`${API_URL}/shop/product`)
     setInfo(data.data.productInfoList)
     // console.log(products)
