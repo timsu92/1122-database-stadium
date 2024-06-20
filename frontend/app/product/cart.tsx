@@ -77,6 +77,11 @@ const CartPage: React.FC<cartProps> = ({ jwtToken }) => {
   // console.log(jwtToken)
   const [cart_id, setCart_id] = useState('')
   const getCart = async () => {
+    const cart = await axios.post('http://localhost:8080/users/carts', {
+      headers: { Authorization: jwtToken },
+    })
+    console.log(cart.data)
+
     const data = await axios.get(`http://localhost:8080/users/carts/list`, {
       headers: { Authorization: `${jwtToken}` },
     })

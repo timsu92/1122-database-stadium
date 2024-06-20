@@ -70,9 +70,13 @@ export default function Product() {
       //   console.log(cart_id)
       // }
     }
-    login('admin', 'admin')
+    //login('admin', 'admin')
 
     const getProducts = async () => {
+      const token = localStorage.getItem('token') as string
+      setJwtToken(token)
+      console.log(jwtToken)
+
       const data = await axios.get('http://localhost:8080/shops/products')
       // console.log(data.data)
       // console.log(data.data.productList)
@@ -83,8 +87,12 @@ export default function Product() {
     getProducts()
 
     const getCart = async () => {
+      console.log(jwtToken)
+      const cart = await axios.post('http://localhost:8080/users/carts', {
+        headers: { Authorization: jwtToken },
+      })
       const data = await axios.get(`http://localhost:8080/users/carts/list`, {
-        headers: { Authorization: `${jwtToken}` },
+        headers: { Authorization: jwtToken },
       })
       if (data.data.Cart_List) {
         setCart_id(data.data.Cart_List[0])
@@ -93,8 +101,10 @@ export default function Product() {
       // console.log(data.data.Cart_List[0])
     }
 
-    //getCart()
-  }, [])
+    if (jwtToken!='') {
+      getCart()
+    }
+  }, [jwtToken])
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
