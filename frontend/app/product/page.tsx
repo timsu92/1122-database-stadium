@@ -3,23 +3,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-import { MoreHorizontal, PlusCircle } from 'lucide-react'
+import EditInfo from './editInfo'
 import InfoPage from './info'
 import CartPage from './cart'
 import NewProduct from './add'
-import Edit from './edit'
+import EditProduct from './edit'
 import { Button } from '@/components/ui/button'
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import {
   Table,
   TableBody,
@@ -107,16 +97,27 @@ async function deleteProduct(id: string) {
 export default function Dashboard() {
   const [products, setProducts] = useState<Product_t[]>([])
   const [selectProduct, setSelectProduct] = useState<Product_t>(productTemp[0])
+  const [jwtToken, setJwtToken] = useState('')
 
   useEffect(() => {
+    const login = async (email: string, password: string) => {
+      const res = await axios.post('http://localhost:8080/auth/login', {
+        email: email,
+        password: password,
+      })
+      console.log(res.data)
+      setJwtToken(res.data.jwtToken)
+    }
+    login('admin', 'admin')
+
     const getProducts = async () => {
       // const res = await fetch('http://localhost:8080/shops/products')
       const data = await axios.get('http://localhost:8080/shops/products')
-      console.log(data.data)
-      console.log(data.data.productList)
+      // console.log(data.data)
+      // console.log(data.data.productList)
       // const { data } = await axios.get(`${API_URL}/shop/product`)
       setProducts(data.data.productList)
-      console.log(products)
+      // console.log(products)
     }
     getProducts()
   }, [])
@@ -128,7 +129,7 @@ export default function Dashboard() {
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <div className="ml-auto flex items-center gap-2">
             <CartPage />
-            <NewProduct />
+            <NewProduct jwtToken={jwtToken} />
           </div>
           <Card x-chunk="dashboard-06-chunk-0">
             <CardHeader>
@@ -152,10 +153,14 @@ export default function Dashboard() {
                       <span className="sr-only">Buy</span>
                     </TableHead>
                     <TableHead>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">Edit</span>
                     </TableHead>
                     <TableHead>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">Edit Info</span>
+                    </TableHead>
+
+                    <TableHead>
+                      <span className="sr-only">Delete</span>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
@@ -184,7 +189,13 @@ export default function Dashboard() {
                         <InfoPage product={product} />
                       </TableCell>
                       <TableCell>
-                        <Edit />
+                        <EditProduct
+                          jwtToken={jwtToken}
+                          initialProductData={product}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <EditInfo jwtToken={jwtToken} productId={product.id} />
                       </TableCell>
 
                       <TableCell>
