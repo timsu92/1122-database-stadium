@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
@@ -15,6 +16,7 @@ const SignUp: React.FC = () => {
   const [role, setRole] = useState('user')
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isSignUP, setIsSignUp] = useState(false)
   // const router = useRouter()
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -38,8 +40,11 @@ const SignUp: React.FC = () => {
 
       if (response.status === 409 || response.status === 500) {
         alert('Error: ' + response.data.message)
+        setErrorMessage(response.data.message)
       } else if (response.status === 200) {
         console.log('Server response:', response.data)
+        alert('Sign up success')
+        setIsSignUp(true)
         // router.push('/../login') // Navigate to login page
       }
     } catch (error) {
@@ -149,9 +154,19 @@ const SignUp: React.FC = () => {
           <Button
             type="submit"
             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            disabled={isSignUP ? true : false}
           >
             Sign Up
           </Button>
+          {isSignUP && (
+            <div className="mt-2 text-center">
+              <Link href="/login/">
+                <p className="text-indigo-600 hover:text-indigo-900">
+                  Go back Login page
+                </p>
+              </Link>
+            </div>
+          )}
           <br />
           {errorMessage && (
             <p className="text-red-500 text-sm mb-4">{errorMessage}</p>

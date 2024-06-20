@@ -1,4 +1,4 @@
-import Login from './login/login'
+import Login from './login/page'
 import SignUp from './sign_up/page'
 
 export default function Home() {
