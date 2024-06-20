@@ -65,7 +65,7 @@ export default function ReservePage() {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar page='reserve' />
       <div className="h-full flex flex-col items-center justify-center text-3xl">
         Reserve Page
         <Calendar

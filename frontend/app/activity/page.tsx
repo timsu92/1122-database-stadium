@@ -129,7 +129,7 @@ export default function ActivityPage() {
   // if (error) return <div>Error: {error}</div>;
   return (
     <>
-      <Sidebar />
+      <Sidebar page='activity' />
       <div className="h-full flex flex-col items-center justify-center text-3xl">
         Activity Page
         <Carousel

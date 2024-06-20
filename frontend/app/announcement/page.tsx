@@ -96,7 +96,7 @@ export default function ActivityPage() {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar page="announcement" />
       <div className="h-full flex flex-col items-center justify-center text-3xl">
         Announcement Page
         <ScrollArea className="h-96 w-4/6 rounded-md border">
