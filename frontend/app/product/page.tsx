@@ -9,6 +9,7 @@ import CartPage from './cart'
 import NewProduct from './add'
 import EditProduct from './edit'
 import { Button } from '@/components/ui/button'
+import { Sidebar } from '../sidebar/page'
 
 import {
   Table,
@@ -107,99 +108,105 @@ export default function Product() {
   }, [jwtToken])
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <div className="ml-auto flex items-center gap-2">
-            <CartPage jwtToken={jwtToken} />
-            <NewProduct jwtToken={jwtToken} />
-          </div>
-          <Card x-chunk="dashboard-06-chunk-0">
-            <CardHeader>
-              <CardTitle>Products</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="hidden w-[100px] sm:table-cell">
-                      <span className="sr-only">Image</span>
-                    </TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Price
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Brand
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">Buy</span>
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">Edit</span>
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">Edit Info</span>
-                    </TableHead>
+    <>
+      <Sidebar />
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
+          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+            <div className="ml-auto flex items-center gap-2">
+              <CartPage jwtToken={jwtToken} />
+              <NewProduct jwtToken={jwtToken} />
+            </div>
+            <Card x-chunk="dashboard-06-chunk-0">
+              <CardHeader>
+                <CardTitle>Products</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="hidden w-[100px] sm:table-cell">
+                        <span className="sr-only">Image</span>
+                      </TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Price
+                      </TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Brand
+                      </TableHead>
+                      <TableHead>
+                        <span className="sr-only">Buy</span>
+                      </TableHead>
+                      <TableHead>
+                        <span className="sr-only">Edit</span>
+                      </TableHead>
+                      <TableHead>
+                        <span className="sr-only">Edit Info</span>
+                      </TableHead>
 
-                    <TableHead>
-                      <span className="sr-only">Delete</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {products.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell className="hidden sm:table-cell">
-                        <Image
-                          alt={''}
-                          className="aspect-square rounded-md object-cover"
-                          height={64}
-                          src={''}
-                          width={64}
-                        />
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {product.name}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        ${product.price}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {product.brand}
-                      </TableCell>
-                      <TableCell>
-                        <InfoPage product={product} />
-                      </TableCell>
-                      <TableCell>
-                        <EditProduct
-                          jwtToken={jwtToken}
-                          initialProductData={product}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <EditInfo jwtToken={jwtToken} productId={product.id} />
-                      </TableCell>
-
-                      <TableCell>
-                        <Button
-                          variant="destructive"
-                          onClick={() => {
-                            deleteProduct(product.id, jwtToken)
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
+                      <TableHead>
+                        <span className="sr-only">Delete</span>
+                      </TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </main>
+                  </TableHeader>
+                  <TableBody>
+                    {products.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell className="hidden sm:table-cell">
+                          <Image
+                            alt={''}
+                            className="aspect-square rounded-md object-cover"
+                            height={64}
+                            src={''}
+                            width={64}
+                          />
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {product.name}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          ${product.price}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          {product.brand}
+                        </TableCell>
+                        <TableCell>
+                          <InfoPage product={product} />
+                        </TableCell>
+                        <TableCell>
+                          <EditProduct
+                            jwtToken={jwtToken}
+                            initialProductData={product}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <EditInfo
+                            jwtToken={jwtToken}
+                            productId={product.id}
+                          />
+                        </TableCell>
+
+                        <TableCell>
+                          <Button
+                            variant="destructive"
+                            onClick={() => {
+                              deleteProduct(product.id, jwtToken)
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
