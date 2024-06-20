@@ -111,10 +111,11 @@ const CartPage: React.FC<cartProps> = ({ jwtToken }) => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Id</TableHead>
+                <TableHead className="w-[100px]">Product Id</TableHead>
                 <TableHead>SIze</TableHead>
                 <TableHead>Color</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Remove</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -125,16 +126,21 @@ const CartPage: React.FC<cartProps> = ({ jwtToken }) => {
                   </TableCell>
                   <TableCell>{item.size}</TableCell>
                   <TableCell>{item.color}</TableCell>
-                  <TableCell className="text-right">{item.count}</TableCell>
+                  <TableCell>{item.count}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        //deleteProduct(product.id, jwtToken)
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <SheetFooter>
-            <SheetClose asChild>
-              <Button type="submit">Close</Button>
-            </SheetClose>
-          </SheetFooter>
         </SheetContent>
       </Sheet>
     </>
