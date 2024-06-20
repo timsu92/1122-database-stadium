@@ -6,6 +6,17 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
+
 interface Reserve {
     user_mail: string,
     usedtableid: number,
@@ -64,44 +75,68 @@ export default function ReservePage() {
 
     return (
         <>
-            <div className='h-full flex flex-col items-center justify-center text-3xl'>
-                Reserve Page
-                <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border"
-                />
-                <input
-                    type="text"
-                    placeholder="Time Index"
-                    value={timeIndex}
-                    onChange={(e) => setTimeIndex(e.target.value)}
-                    className="mt-4 p-2 border rounded"
-                />
-                <input
-                    type="number"
-                    placeholder="Table ID"
-                    value={tableid !== undefined ? tableid : ''}
-                    onChange={(e) => setTableid(parseInt(e.target.value))}
-                    className="mt-4 p-2 border rounded"
-                />
-                <Button onClick={handleSubmit} className="mt-4">
-                    Submit
-                </Button>
-                <ScrollArea className="h-96 w-4/6 rounded-md border mt-4">
-                    <div className="p-4">
-                        {reserves.map((reserve, index) => (
-                            <div key={index} className="text-sm">
-                                <h1 className="text-lg">{reserve.user_mail}</h1>
-                                <p className="text-slate-400">{reserve.tabledate}</p>
-                                <div>Table ID: {reserve.usedtableid}</div>
-                                <div>Time Index: {reserve.timeidx}</div>
-                                <Separator className="my-2" />
-                            </div>
-                        ))}
+            <div className='h-full flex flex-col items-center justify-center m-8 text-3xl'>
+                <h2 className='text-6xl font-semibold m-8'>Reserve Page</h2>
+                <div className="flex gap-8">
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        className="rounded-md border"
+                    />
+                    <div className="flex flex-col">
+                        <input
+                            type="text"
+                            placeholder="Time Index"
+                            value={timeIndex}
+                            onChange={(e) => setTimeIndex(e.target.value)}
+                            className="mt-4 p-2 border rounded"
+                        />
+                        <input
+                            type="number"
+                            placeholder="Table ID"
+                            value={tableid !== undefined ? tableid : ''}
+                            onChange={(e) => setTableid(parseInt(e.target.value))}
+                            className="mt-4 p-2 border rounded"
+                        />
+                        <Button onClick={handleSubmit} className="mt-4">
+                            Submit
+                        </Button>
                     </div>
-                </ScrollArea>
+                </div>
+                <div className="m-8">
+                    <Drawer>
+                        <DrawerTrigger>
+                            <Button variant="outline">Edit Profile</Button>
+                        </DrawerTrigger>
+                        <DrawerContent className="items-center">
+                            {/* <DrawerHeader>
+                                <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                                <DrawerDescription>This action cannot be undone.</DrawerDescription>
+                            </DrawerHeader> */}
+                            <div className="items-center justify-center">
+                                <ScrollArea className="h-96 w-full rounded-md border mt-4">
+                                    <div className="p-4">
+                                        {reserves.map((reserve, index) => (
+                                            <div key={index} className="text-sm">
+                                                <h1 className="text-lg">{reserve.user_mail}</h1>
+                                                <p className="text-slate-400">{reserve.tabledate}</p>
+                                                <div>Table ID: {reserve.usedtableid}</div>
+                                                <div>Time Index: {reserve.timeidx}</div>
+                                                <Separator className="my-2" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
+                            </div>
+                            <DrawerFooter>
+                                <DrawerClose>
+                                    <Button variant="outline">Close</Button>
+                                </DrawerClose>
+                            </DrawerFooter>
+                        </DrawerContent>
+                    </Drawer>
+                </div>
             </div>
         </>
     );

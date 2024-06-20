@@ -12,8 +12,8 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Button } from "@/components/ui/button"
 
+import { Button } from "@/components/ui/button"
 
 import {
     Carousel,
@@ -128,8 +128,8 @@ export default function ActivityPage() {
     // if (error) return <div>Error: {error}</div>;
     return (
         <>
-            <div className='h-full flex flex-col items-center justify-center text-3xl'>
-                Activity Page
+            <div className='h-full flex flex-col items-center justify-center m-8 text-3xl'>
+                <h2 className='text-6xl font-semibold m-8'>Activity Page</h2>
                 <Carousel
                     opts={{
                         align: "start",
@@ -139,7 +139,7 @@ export default function ActivityPage() {
                     <CarouselContent>
                         {Activities.map((activity) => (
                             <CarouselItem key={activity.id} className="md:basis-1/2 lg:basis-1/3">
-                                <div className="p-1">
+                                <div className="p-1 hover:bg-slate-300">
                                     <Card>
                                         <CardContent className="flex aspect-square items-center justify-center p-6">
                                             <div className='flex flex-col'>

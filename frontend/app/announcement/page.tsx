@@ -96,14 +96,14 @@ export default function ActivityPage() {
 
     return (
         <>
-            <div className='h-full flex flex-col items-center justify-center text-3xl'>
-                Announcement Page
+            <div className='h-full flex flex-col items-center justify-center m-8 text-3xl'>
+                <h2 className='text-6xl font-semibold m-8'>Announcement Page</h2>
                 <ScrollArea className="h-96 w-4/6 rounded-md border">
                     <div className="p-4">
                         {/* <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4> */}
                         {Announcements.map((announcement) => (
                             <>
-                                <div key={announcement.id} className="text-sm">
+                                <div key={announcement.id} className="text-sm hover:bg-slate-100">
                                     <h1 className="text-lg">{announcement.title}</h1>
                                     <p className="text-slate-400">{announcement.time}</p>
                                     <div>
