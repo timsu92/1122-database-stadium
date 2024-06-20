@@ -151,10 +151,10 @@ const EditInfo: React.FC<EditProductProps> = ({
       </SheetTrigger>
 
       <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Edit Product Stores</SheetTitle>
-        </SheetHeader>
         <ScrollArea className="h-[700px] w-[350px] rounded-md border p-4">
+          <SheetHeader>
+            <SheetTitle>Edit Product Stores</SheetTitle>
+          </SheetHeader>
           <div className="flex flex-col">
             {/* 编辑已有的 ProductStore 信息 */}
             {productStores.map((store) => (
