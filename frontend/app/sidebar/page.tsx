@@ -71,7 +71,7 @@ export function Sidebar({ page }: Props) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="#" // link to course
+                  href="\Courses" // link to course
                   className={classes(page, 'course')}
                 >
                   <School className="h-5 w-5" />

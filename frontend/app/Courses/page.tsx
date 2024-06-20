@@ -17,6 +17,7 @@ import Update from './updateCourse';
 import axios from 'axios';
 import UserCourseList from './userCourseList';
 import { useRouter } from 'next/navigation'
+import { Sidebar } from '../sidebar/page';
 
 export interface Icourse {
   id: string;
@@ -123,10 +124,10 @@ export default function Courses() {
       user_name: subUser,
     }
     const res = await axios.post('http://localhost:8080/users/courses/add',
-    body,
-    {
-      headers: { Authorization: jwtToken }
-    })
+      body,
+      {
+        headers: { Authorization: jwtToken }
+      })
     if (res.status == 200) {
       alert('Enroll course successfully')
     } else {
@@ -135,64 +136,67 @@ export default function Courses() {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <div className="ml-auto flex items-center gap-2">
-            <NewCourse jwtToken={jwtToken} />
-            <UserCourseList subUserNmae='Sebastian' jwtToken={jwtToken} />
-          </div>
-          <Card x-chunk="dashboard-06-chunk-0">
-            <CardHeader>
-              <CardTitle>Course Overview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableCaption>A list of recent courses.</TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Course</TableHead>
-                    <TableHead className="text-center">Start Date</TableHead>
-                    <TableHead className="text-center">Week Day</TableHead>
-                    <TableHead className="text-center">Time Slot</TableHead>
-                    <TableHead className="text-center">Weeks</TableHead>
-                    <TableHead className="text-center">Type</TableHead>
-                    <TableHead className="text-center">Price</TableHead>
-                    <TableHead className="text-center">Enroll</TableHead>
-                    {/* <TableHead className="text-center">Update</TableHead> */}
-                    <TableHead className="text-center">Delete Course</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {courses.map((course) => (
-                    <TableRow key={course.id}>
-                      <TableCell className="font-medium">{course.title}</TableCell>
-                      <TableCell className="text-center">{course.startDay}</TableCell>
-                      <TableCell className="text-center">{course.weekday}</TableCell>
-                      <TableCell className="text-center">{course.timeSlot}</TableCell>
-                      <TableCell className="text-center">{course.weeks}</TableCell>
-                      <TableCell className="text-center">{course.courseType}</TableCell>
-                      <TableCell className="text-center">{`$${course.fee}`}</TableCell>
-                      <TableCell className="text-center">
-                        <Button variant="outline" onClick={() => { handleAddCourse('Sebastian',course.id) }}>Enroll</Button>
-                      </TableCell>
-                      {/* <TableCell className="text-right">
+    <>
+      <Sidebar page='course'/>
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+          <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
+          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+            <div className="ml-auto flex items-center gap-2">
+              <NewCourse jwtToken={jwtToken} />
+              <UserCourseList subUserNmae='Sebastian' jwtToken={jwtToken} />
+            </div>
+            <Card x-chunk="dashboard-06-chunk-0">
+              <CardHeader>
+                <CardTitle>Course Overview</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableCaption>A list of recent courses.</TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[100px]">Course</TableHead>
+                      <TableHead className="text-center">Start Date</TableHead>
+                      <TableHead className="text-center">Week Day</TableHead>
+                      <TableHead className="text-center">Time Slot</TableHead>
+                      <TableHead className="text-center">Weeks</TableHead>
+                      <TableHead className="text-center">Type</TableHead>
+                      <TableHead className="text-center">Price</TableHead>
+                      <TableHead className="text-center">Enroll</TableHead>
+                      {/* <TableHead className="text-center">Update</TableHead> */}
+                      <TableHead className="text-center">Delete Course</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {courses.map((course) => (
+                      <TableRow key={course.id}>
+                        <TableCell className="font-medium">{course.title}</TableCell>
+                        <TableCell className="text-center">{course.startDay}</TableCell>
+                        <TableCell className="text-center">{course.weekday}</TableCell>
+                        <TableCell className="text-center">{course.timeSlot}</TableCell>
+                        <TableCell className="text-center">{course.weeks}</TableCell>
+                        <TableCell className="text-center">{course.courseType}</TableCell>
+                        <TableCell className="text-center">{`$${course.fee}`}</TableCell>
+                        <TableCell className="text-center">
+                          <Button variant="outline" onClick={() => { handleAddCourse('Sebastian', course.id) }}>Enroll</Button>
+                        </TableCell>
+                        {/* <TableCell className="text-right">
                         <Update />
                       </TableCell> */}
-                      <TableCell className="text-center">
-                        <Button variant="destructive" onClick={() => { deleteCourse(course.id) }}>
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </main>
+                        <TableCell className="text-center">
+                          <Button variant="destructive" onClick={() => { deleteCourse(course.id) }}>
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
