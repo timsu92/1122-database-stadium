@@ -59,10 +59,10 @@ export default function Courses() {
       fee: 0,
       timeIdx: [0],
       usedTableId: [0],
-      coachEmail: ['loading...'],
+      coachEmail: ['cloading...'],
     },
   ])
-
+ 
   useEffect(() => {
     setJwtToken(localStorage.getItem('token') as string)
   }, [])
