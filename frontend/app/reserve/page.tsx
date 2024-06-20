@@ -1,39 +1,10 @@
 'use client'
+import { useState, useEffect } from "react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { useState } from "react"
 
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { toast } from "@/components/ui/use-toast"
-
-const FormSchema = z.object({
-    date: z.date().optional(),
-    timeIndex: z.string(),
-    tableid: z.number(),
-});
 
 interface Reserve {
     user_mail: string,
@@ -42,7 +13,7 @@ interface Reserve {
     timeidx: number
 }
 
-const Reserves: Reserve[] = [
+const reserves: Reserve[] = [
     {
         "user_mail": "dev@dev.com",
         "usedtableid": 5,
@@ -51,114 +22,87 @@ const Reserves: Reserve[] = [
     }
 ]
 
-
-export default function ActivityPage() {
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-    })
-
-    const [timeIndex, setTimeid] = useState<string>('');
+export default function ReservePage() {
+    const [timeIndex, setTimeIndex] = useState<string>('');
     const [tableid, setTableid] = useState<number | undefined>();
+    const [date, setDate] = useState<Date | undefined>(new Date());
+    // const [reserves, setReserves] = useState<Reserve[]>([]);
+    // const [loading, setLoading] = useState<boolean>(true);
+    // const [error, setError] = useState<string | null>(null);
 
-    async function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-            title: "You submitted the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            ),
-        })
+    // useEffect(() => {
+    //     const fetchReserves = async () => {
+    //         try {
+    //             const response = await fetch('/api/reserves');
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             const data = await response.json();
+    //             setReserves(data);
+    //         } catch (error: unknown) {
+    //             if (error instanceof Error) {
+    //                 setError(error.message);
+    //             } else {
+    //                 setError('An unknown error occurred');
+    //             }
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
 
+    //     fetchReserves();
+    // }, []);
 
-        try {
-            const response = await fetch('http://localhost:8080/users/reserves', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div>Error: {error}</div>;
 
-            const responseData = await response.json();
-            console.log('API response:', responseData);
-            // 根據需要處理 API 回應
-        } catch (error) {
-            console.error('API request failed:', error);
-            // 根據需要處理錯誤
-        }
-    }
+    const handleSubmit = () => {
+        console.log('Date:', date);
+        console.log('Time Index:', timeIndex);
+        console.log('Table ID:', tableid);
+    };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 h-full flex flex-col items-center justify-center text-3xl">
-                <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-
-                        <FormItem className="h-full flex flex-col items-center justify-center text-3xl gap-8">
-                            Reserve Table
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-[240px] pl-3 text-left font-normal",
-                                                !field.value && "text-muted-foreground"
-                                            )}
-                                        >
-                                            {field.value ? (
-                                                format(field.value, "PPP")
-                                            ) : (
-                                                <span>Pick a date</span>
-                                            )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
-                                        disabled={(date) =>
-                                            date < new Date()
-                                        }
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                                Please select the date you want to reserve a table
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+        <>
+            <div className='h-full flex flex-col items-center justify-center text-3xl'>
+                Reserve Page
+                <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    className="rounded-md border"
                 />
-                <FormItem>
-                    <input
-                        type="text"
-                        placeholder="Enter Time INDEX"
-                        value={timeIndex}
-                        onChange={(e) => setTimeid(e.target.value)}
-                    />
-                </FormItem>
-
-                <FormItem>
-                    <input
-                        type="number"
-                        placeholder="Enter Table ID"
-                        value={tableid}
-                        onChange={(e) => setTableid(parseInt(e.target.value))}
-                    />
-                </FormItem>
-                <Button type="submit">Submit</Button>
-            </form>
-        </Form>
+                <input
+                    type="text"
+                    placeholder="Time Index"
+                    value={timeIndex}
+                    onChange={(e) => setTimeIndex(e.target.value)}
+                    className="mt-4 p-2 border rounded"
+                />
+                <input
+                    type="number"
+                    placeholder="Table ID"
+                    value={tableid !== undefined ? tableid : ''}
+                    onChange={(e) => setTableid(parseInt(e.target.value))}
+                    className="mt-4 p-2 border rounded"
+                />
+                <Button onClick={handleSubmit} className="mt-4">
+                    Submit
+                </Button>
+                <ScrollArea className="h-96 w-4/6 rounded-md border mt-4">
+                    <div className="p-4">
+                        {reserves.map((reserve, index) => (
+                            <div key={index} className="text-sm">
+                                <h1 className="text-lg">{reserve.user_mail}</h1>
+                                <p className="text-slate-400">{reserve.tabledate}</p>
+                                <div>Table ID: {reserve.usedtableid}</div>
+                                <div>Time Index: {reserve.timeidx}</div>
+                                <Separator className="my-2" />
+                            </div>
+                        ))}
+                    </div>
+                </ScrollArea>
+            </div>
+        </>
     );
 };
