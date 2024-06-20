@@ -76,7 +76,7 @@ export default function ReservePage() {
 
     return (
         <>
-            <Sidebar />
+            <Sidebar page='reserve' />
             <div className='h-full flex flex-col items-center justify-center m-8 text-3xl'>
                 <h2 className='text-6xl font-semibold m-8'>Reserve Page</h2>
                 <div className="flex gap-8">

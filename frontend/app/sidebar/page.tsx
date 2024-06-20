@@ -14,7 +14,16 @@ import {
   TooltipProvider,
 } from '@/components/ui/tooltip'
 
-export function Sidebar() {
+type Props = { page: string }
+
+function classes(page: string, ref: string): string {
+  return (
+    'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8' +
+    (page === ref ? 'bg-accent' : '')
+  )
+}
+
+export function Sidebar({ page }: Props) {
   return (
     <TooltipProvider>
       <div>
@@ -24,7 +33,7 @@ export function Sidebar() {
               <TooltipTrigger asChild>
                 <Link
                   href="\announcement"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                  className={classes(page, 'announcement')}
                 >
                   <MessageCircleCode className="h-5 w-5" />
                   <span className="sr-only">Announcement</span>
@@ -34,10 +43,7 @@ export function Sidebar() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  href="\activity"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
+                <Link href="\activity" className={classes(page, 'activity')}>
                   <Target className="h-5 w-5" />
                   <span className="sr-only">Activity</span>
                 </Link>
@@ -46,10 +52,7 @@ export function Sidebar() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  href="\product"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
+                <Link href="\product" className={classes(page, 'product')}>
                   <Package className="h-5 w-5" />
                   <span className="sr-only">Product</span>
                 </Link>
@@ -58,10 +61,7 @@ export function Sidebar() {
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  href="\reserve"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
+                <Link href="\reserve" className={classes(page, 'reserve')}>
                   <Bookmark className="h-5 w-5" />
                   <span className="sr-only">Reserve</span>
                 </Link>
@@ -72,7 +72,7 @@ export function Sidebar() {
               <TooltipTrigger asChild>
                 <Link
                   href="#" // link to course
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                  className={classes(page, 'course')}
                 >
                   <School className="h-5 w-5" />
                   <span className="sr-only">Course</span>
