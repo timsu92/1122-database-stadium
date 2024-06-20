@@ -15,7 +15,7 @@ const SignUp: React.FC = () => {
   const [role, setRole] = useState('user')
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const router = useRouter()
+  // const router = useRouter()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -28,18 +28,19 @@ const SignUp: React.FC = () => {
     setErrorMessage('')
 
     try {
-      const response = await axios.post('http://localhost:3000/register', {
-        email,
-        password,
-        phone,
-        role,
+      console.log(email, password, phone, role)
+      const response = await axios.post('http://localhost:8080/auth/register', {
+        email: email,
+        password: password,
+        phone: phone,
+        role: role,
       })
 
       if (response.status === 409 || response.status === 500) {
         alert('Error: ' + response.data.message)
       } else if (response.status === 200) {
         console.log('Server response:', response.data)
-        router.push('/login') // Navigate to login page
+        // router.push('/../login') // Navigate to login page
       }
     } catch (error) {
       console.error('There was an error submitting the form!', error)
@@ -88,11 +89,7 @@ const SignUp: React.FC = () => {
               className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? (
-                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-              ) : (
-                <AiOutlineEye className="h-5 w-5 text-gray-500" />
-              )}
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
             </div>
           </div>
           <div className="mb-4 relative">
@@ -113,11 +110,7 @@ const SignUp: React.FC = () => {
               className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? (
-                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-              ) : (
-                <AiOutlineEye className="h-5 w-5 text-gray-500" />
-              )}
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
             </div>
           </div>
           <div className="mb-4">
