@@ -10,7 +10,6 @@ import NewProduct from './add'
 import EditProduct from './edit'
 import { Button } from '@/components/ui/button'
 import { Sidebar } from '../sidebar/page'
-
 import {
   Table,
   TableBody,
@@ -50,62 +49,65 @@ export default function Product() {
   const [jwtToken, setJwtToken] = useState('')
   const [cart_id, setCart_id] = useState('')
   useEffect(() => {
-    const login = async (email: string, password: string) => {
-      const res = await axios.post('http://localhost:8080/auth/login', {
-        email: email,
-        password: password,
-      })
-      console.log(res.data)
-      setJwtToken(res.data.jwtToken)
-      // console.log(jwtToken)
-      // await axios.post('http://localhost:8080/users/carts/', null, {
-      //   headers: { Authorization: jwtToken }, // 将设置的头部信息传递给 Axios 请求配置
-      // })
-      //
-      // const data = await axios.get(`http://localhost:8080/users/carts/list`, {
-      //   headers: { Authorization: jwtToken },
-      // })
-      // console.log(data.data)
-      // if (data.data.Cart_List) {
-      //   setCart_id(data.data.Cart_List[0])
-      //   console.log(cart_id)
-      // }
-    }
-    //login('admin', 'admin')
-
+    // 定义获取产品的异步函数
     const getProducts = async () => {
-      const token = localStorage.getItem('token') as string
-      setJwtToken(token)
-      console.log(jwtToken)
+      try {
+        const token = localStorage.getItem('token')
+        if (token) {
+          setJwtToken(token) // 设置 JWT token
+          console.log(token)
+        }
 
-      const data = await axios.get('http://localhost:8080/shops/products')
-      // console.log(data.data)
-      // console.log(data.data.productList)
-      // const { data } = await axios.get(`${API_URL}/shop/product`)
-      setProducts(data.data.productList)
-      // console.log(products)
-    }
-    getProducts()
-
-    const getCart = async () => {
-      console.log(jwtToken)
-      const cart = await axios.post('http://localhost:8080/users/carts', {
-        headers: { Authorization: jwtToken },
-      })
-      const data = await axios.get(`http://localhost:8080/users/carts/list`, {
-        headers: { Authorization: jwtToken },
-      })
-      if (data.data.Cart_List) {
-        setCart_id(data.data.Cart_List[0])
-        console.log(cart_id)
+        // 确保 token 被正确设置之后再调用 getCart
+        if (jwtToken) {
+          const data = await axios.get('http://localhost:8080/shops/products')
+          setProducts(data.data.productList) // 设置产品数据
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error)
       }
-      // console.log(data.data.Cart_List[0])
     }
 
-    if (jwtToken!='') {
-      getCart()
+    // 定义获取购物车的异步函数
+    const getCart = async () => {
+      try {
+        if (jwtToken) {
+          const cart = await axios.post(
+            'http://localhost:8080/users/carts',
+            {},
+            {
+              headers: { Authorization: `${jwtToken}` }, // 发送 POST 请求时带上 token
+            }
+          )
+          console.log(cart.data)
+          setCart_id(cart.data.cart_id)
+          console.log(cart_id)
+          const data = await axios.get(
+            'http://localhost:8080/users/carts/list',
+            {
+              headers: { Authorization: `${jwtToken}` }, // 发送 GET 请求时带上 token
+            }
+          )
+          console.log(data.data)
+          // if (data.data.Carts_List.length > 0) {
+          //   const idx = data.data.Carts_List.length - 1
+          //   setCart_id(data.data.Carts_List[idx])
+          //   console.log(cart_id)
+          //   //console.log('test')
+          // }
+        }
+      } catch (error) {
+        console.error('Error fetching cart:', error)
+      }
     }
-  }, [jwtToken])
+
+    getProducts() // 调用获取产品的函数
+
+    // 使用 useEffect 中的 cleanup 函数或依赖数组来确保 getCart 在 jwtToken 更新后被调用
+    if (jwtToken) {
+      getCart() // 调用获取购物车的函数
+    }
+  }, [jwtToken]) // 依赖 jwtToken 的变化
 
   return (
     <>
@@ -115,7 +117,7 @@ export default function Product() {
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"></header>
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             <div className="ml-auto flex items-center gap-2">
-              <CartPage jwtToken={jwtToken} />
+              <CartPage jwtToken={jwtToken} cart_id={cart_id} />
               <NewProduct jwtToken={jwtToken} />
             </div>
             <Card x-chunk="dashboard-06-chunk-0">
@@ -173,7 +175,11 @@ export default function Product() {
                           {product.brand}
                         </TableCell>
                         <TableCell>
-                          <InfoPage product={product} />
+                          <InfoPage
+                            product={product}
+                            cart_id={cart_id}
+                            jwtToken={jwtToken}
+                          />
                         </TableCell>
                         <TableCell>
                           <EditProduct

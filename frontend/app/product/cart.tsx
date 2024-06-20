@@ -46,54 +46,70 @@ interface Cart {
   size: string
   color: string
 }
-const productTemp: Cart[] = [
-  {
-    name: 'Throwback Hip Bag',
-    brand: '',
-    size: '',
-    color: 'Salmon',
-    price: 90,
-    count: 1,
-    imgurl:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-  },
-  {
-    name: 'Medium Stuff Satchel',
-    brand: '',
-    size: 'M',
-    color: 'Blue',
-    price: 32,
-    count: 1,
-    imgurl:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-  },
-  // More products...
-]
 export interface cartProps {
   jwtToken: string
+  cart_id: string
 }
 
-const CartPage: React.FC<cartProps> = ({ jwtToken }) => {
+const CartPage: React.FC<cartProps> = ({ jwtToken, cart_id }) => {
   // console.log(jwtToken)
-  const [cart_id, setCart_id] = useState('')
+  //const [cart_id, setCart_id] = useState('')
+  const defaultCartData: CartData[] = [
+    {
+      product_id: 'empty', // 使用一个表示空的 id
+      size: 'none', // 尺寸不可用
+      color: 'none', // 颜色不可用
+      count: 0, // 数量为 0
+    },
+  ]
+  const [cartData, setCartData] = useState<CartData[]>(temp)
+  const [empty, setEmpty] = useState(false)
   const getCart = async () => {
-    const cart = await axios.post('http://localhost:8080/users/carts', {
-      headers: { Authorization: jwtToken },
-    })
-    console.log(cart.data)
+    console.log(jwtToken, cart_id)
+    try {
+      const data = await axios.get(
+        `http://localhost:8080/users/carts/list-cart?cart_id=${cart_id}`,
+        {
+          headers: { Authorization: `${jwtToken}` },
+        }
+      )
+      console.log(data.data)
+      setCartData(data.data.Products_in_Cart_List)
+      if (data.data.message == 'cart is empty') {
+        setEmpty(true)
+      }
 
-    const data = await axios.get(`http://localhost:8080/users/carts/list`, {
-      headers: { Authorization: `${jwtToken}` },
-    })
-    if (data.data.Cart_List) {
-      setCart_id(data.data.Cart_List[0])
-      console.log(cart_id)
+      // alert('add to cart success')
+    } catch (error) {
+      console.error('Error fetching cart:', error)
     }
-    // console.log(data.data.Cart_List[0])
+    //   if (data.data.Cart_List) {
+    //     setCart_id(data.data.Cart_List[0])
+    //     console.log(cart_id)
+    //   }
+    //   // console.log(data.data.Cart_List[0])
   }
-  async function removeFromCart(cart_id: string) {
+  async function removeFromCart(product: CartData) {
     //
-    //await axios.delete(`${API_URL}/user/cart`)
+    try {
+      const data = await axios.delete(
+        `http://localhost:8080/users/carts/remove`,
+        {
+          data: {
+            cart_id: cart_id,
+            product_id: product.product_id,
+            size: product.size,
+            color: product.color,
+            count: 1,
+          },
+          headers: { Authorization: jwtToken },
+        }
+      )
+      console.log(data.data)
+      alert('remove from cart successfully')
+    } catch (err) {
+      console.error('Error remove from cart:', err)
+    }
   }
 
   return (
@@ -117,34 +133,36 @@ const CartPage: React.FC<cartProps> = ({ jwtToken }) => {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Product Id</TableHead>
-                <TableHead>SIze</TableHead>
+                <TableHead>Size</TableHead>
                 <TableHead>Color</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Remove</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {temp.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    {item.product_id}
-                  </TableCell>
-                  <TableCell>{item.size}</TableCell>
-                  <TableCell>{item.color}</TableCell>
-                  <TableCell>{item.count}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="destructive"
-                      onClick={() => {
-                        //deleteProduct(product.id, jwtToken)
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            {cartData && (
+              <TableBody>
+                {cartData.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">
+                      {item.product_id}
+                    </TableCell>
+                    <TableCell>{item.size}</TableCell>
+                    <TableCell>{item.color}</TableCell>
+                    <TableCell>{item.count}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          removeFromCart(item)
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            )}
           </Table>
         </SheetContent>
       </Sheet>
