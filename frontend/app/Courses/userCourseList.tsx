@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Icourse } from './page';
+// import { Icourse } from './page';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -29,23 +29,40 @@ export interface UserCourseListprop {
   jwtToken: string
 }
 
+interface IuserCourse {
+  id: string;
+  title: string;
+  timeslot: number;
+  weekday: string;
+  coursetype: string;
+  duration: number;
+  weeks: number;
+  max: number;
+  content: string;
+  startday: string;
+  fee: number;
+  timeidx: number[];
+  usedtableid: number[];
+  coachemail: string[];
+}
+
 const UserCourseList: React.FC<UserCourseListprop> = ({ subUserNmae, jwtToken }) => {
-  const [courses, setCourses] = useState<Icourse[]>([
+  const [courses, setCourses] = useState<IuserCourse[]>([
     {
       id: 'loading...',
       title: 'loading...',
-      timeSlot: 0,
+      timeslot: 0,
       weekday: 'loading...',
-      courseType: 'loading...',
+      coursetype: 'loading...',
       duration: 0,
       weeks: 0,
       max: 0,
       content: 'loading...',
-      startDay: 'loading...',
+      startday: 'loading...',
       fee: 0,
-      timeIdx: [0],
-      usedTableId: [0],
-      coachEmail: ['loading...',],
+      timeidx: [0],
+      usedtableid: [0],
+      coachemail: ['loading...',],
     }
   ])
 
@@ -56,6 +73,7 @@ const UserCourseList: React.FC<UserCourseListprop> = ({ subUserNmae, jwtToken })
           headers: { Authorization: jwtToken }
         })
         if (response.status === 200) {
+          console.log(response.data)
           setCourses(response.data)
         } else if (response.status === 400) {
           console.log('Don\'t have any course')
@@ -70,22 +88,22 @@ const UserCourseList: React.FC<UserCourseListprop> = ({ subUserNmae, jwtToken })
     }
   }, [jwtToken])
 
-  // async function deleteCourse(subUser:string,courseId: string) {
-  //   const body={
-  //     course_id:courseId,
-  //     subUser:'Sebastian'
-  //   }
-  //   const res = await axios.delete(`http://localhost:8080/users/courses/remove/`,
-  //     body,
-  //     {
-  //       headers: { Authorization: jwtToken },
-  //     })
-  //   if (res.data.message == 'Delete course successfully') {
-  //     alert('Delete course successfully')
-  //   } else {
-  //     console.log(res)
-  //   }
-  // }
+  async function deleteCourse(subUser: string, courseId: string) {
+    const res = await axios.delete('http://localhost:8080/users/courses/remove/',
+      {
+        headers: { Authorization: jwtToken },
+        data:{
+          course_id: courseId,
+          user_name	: subUser
+      }, 
+    }
+    )
+    if (res.status == 200) {
+      alert('Delete course successfully')
+    } else {
+      console.log(res)
+    }
+  }
 
   return (
 
@@ -94,7 +112,7 @@ const UserCourseList: React.FC<UserCourseListprop> = ({ subUserNmae, jwtToken })
         <SheetTrigger asChild>
           <Button variant="outline">User Courses</Button>
         </SheetTrigger>
-        <SheetContent className="sm:w-[500px] !max-w-[500px] !w-[500px]" >
+        <SheetContent className="sm:w-[600px] !max-w-[600px] !w-[600px]" >
           <SheetHeader>
             <SheetTitle>User Course</SheetTitle>
           </SheetHeader>
@@ -121,11 +139,11 @@ const UserCourseList: React.FC<UserCourseListprop> = ({ subUserNmae, jwtToken })
                   {courses.map((course) => (
                     <TableRow key={course.id}>
                       <TableCell className="font-medium">{course.title}</TableCell>
-                      <TableCell className="text-center">{course.startDay}</TableCell>
+                      <TableCell className="text-center">{course.startday}</TableCell>
                       <TableCell className="text-center">{course.weekday}</TableCell>
-                      <TableCell className="text-center">{course.timeSlot}</TableCell>
+                      <TableCell className="text-center">{course.timeslot}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="destructive" onClick={() => { }}>
+                        <Button variant="destructive" onClick={() => { deleteCourse('Sebastian',course.id)}}>
                           Delete
                         </Button>
                       </TableCell>

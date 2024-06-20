@@ -16,6 +16,7 @@ import NewCourse from './createCourse';
 import Update from './updateCourse';
 import axios from 'axios';
 import UserCourseList from './userCourseList';
+import { useRouter } from 'next/navigation'
 
 export interface Icourse {
   id: string;
@@ -41,6 +42,7 @@ export type SubUserType = {
 
 
 export default function Courses() {
+  const router = useRouter()
   const [jwtToken, setJwtToken] = useState<string>('');
   const [courses, setCourses] = useState<Icourse[]>([
     {
@@ -158,8 +160,8 @@ export default function Courses() {
                     <TableHead className="text-center">Type</TableHead>
                     <TableHead className="text-center">Price</TableHead>
                     <TableHead className="text-center">Enroll</TableHead>
-                    <TableHead className="text-center">Update</TableHead>
-                    <TableHead className="text-right">Delete Course</TableHead>
+                    {/* <TableHead className="text-center">Update</TableHead> */}
+                    <TableHead className="text-center">Delete Course</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -172,13 +174,13 @@ export default function Courses() {
                       <TableCell className="text-center">{course.weeks}</TableCell>
                       <TableCell className="text-center">{course.courseType}</TableCell>
                       <TableCell className="text-center">{`$${course.fee}`}</TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-center">
                         <Button variant="outline" onClick={() => { handleAddCourse('Sebastian',course.id) }}>Enroll</Button>
                       </TableCell>
-                      <TableCell className="text-right">
+                      {/* <TableCell className="text-right">
                         <Update />
-                      </TableCell>
-                      <TableCell className="text-right">
+                      </TableCell> */}
+                      <TableCell className="text-center">
                         <Button variant="destructive" onClick={() => { deleteCourse(course.id) }}>
                           Delete
                         </Button>
