@@ -101,6 +101,31 @@ async function get_all_activity() {
 }
 
 export default function ActivityPage() {
+    // const [Activities, setActivities] = useState<Activity[]>([]);
+    // const [loading, setLoading] = useState<boolean>(true);
+    // const [error, setError] = useState<string | null>(null);
+
+    // useEffect(() => {
+    //     const fetchActivities = async () => {
+    //         try {
+    //             const data = await get_all_activity();
+    //             setActivities(data);
+    //         } catch (error: unknown) {
+    //             if (error instanceof Error) {
+    //                 setError(error.message);
+    //             } else {
+    //                 setError('An unknown error occurred');
+    //             }
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchActivities();
+    // }, []);
+
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div>Error: {error}</div>;
     return (
         <>
             <div className='h-full flex flex-col items-center justify-center text-3xl'>

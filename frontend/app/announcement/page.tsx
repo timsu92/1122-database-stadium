@@ -1,6 +1,7 @@
 'use client'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import { useState, useEffect } from "react"
 
 interface Announcement {
     id: string,
@@ -60,11 +61,39 @@ const Announcements: Announcement[] = [
     }
 ];
 
-// const announcement_tags = Announcements.map((announcement, index) => ({
-    
-// }));
-
 export default function ActivityPage() {
+
+    // const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+    // const [loading, setLoading] = useState<boolean>(true);
+    // const [error, setError] = useState<string | null>(null);
+
+    // useEffect(() => {
+    //     const fetchAnnouncements = async () => {
+    //         try {
+    //             const response = await fetch('/api/announcements');
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             const data = await response.json();
+    //             setAnnouncements(data);
+    //         } catch (error: unknown) {
+    //             if (error instanceof Error) {
+    //                 setError(error.message);
+    //             } else {
+    //                 setError('An unknown error occurred');
+    //             }
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchAnnouncements();
+    // }, []);
+
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div>Error: {error}</div>;
+
+
     return (
         <>
             <div className='h-full flex flex-col items-center justify-center text-3xl'>
