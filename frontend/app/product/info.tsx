@@ -17,7 +17,7 @@ export interface ProductStore_t {
   id: string
   sold: number
 }
-export const infoTemp: ProductStore_t[] = [
+const infoTemp: ProductStore_t[] = [
   {
     product_id: '1',
     size: 'XS',
@@ -52,16 +52,38 @@ export const infoTemp: ProductStore_t[] = [
   },
 ]
 interface InfoProps {
-  // cart_id: string
+  cart_id: string
   product: Product_t
+  jwtToken: string
 }
 
-async function addToCart(product: ProductStore_t, cart_id: string) {
-  //
-  //await axios.post(`${API_URL}/user/cart/add`)
+async function addToCart(
+  product: ProductStore_t,
+  cart_id: string,
+  jwtToken: string
+) {
+  console.log(product, cart_id, jwtToken)
+
+  try {
+    const data = await axios.post(
+      `http://localhost:8080/users/carts/add`,
+      {
+        cart_id: cart_id,
+        product_id: product.product_id,
+        size: product.size,
+        color: product.color,
+        count: 1,
+      },
+      { headers: { Authorization: jwtToken } }
+    )
+    console.log(data.data)
+    alert('add to cart success')
+  } catch (error) {
+    console.error('Error fetching cart:', error)
+  }
 }
 
-const InfoPage: React.FC<InfoProps> = ({ product }) => {
+const InfoPage: React.FC<InfoProps> = ({ product, cart_id, jwtToken }) => {
   const productid = product.id
   // console.log(product.id)
 
@@ -71,6 +93,7 @@ const InfoPage: React.FC<InfoProps> = ({ product }) => {
   const getInfo = async (id: string) => {
     // const res = await fetch('http://localhost:8080/shops/products')
     const data = await axios.get(`http://localhost:8080/shops/products/${id}`)
+
     // console.log(data.data)
     // console.log(data.data.productInfoList)
     // const { data } = await axios.get(`${API_URL}/shop/product`)
@@ -113,7 +136,13 @@ const InfoPage: React.FC<InfoProps> = ({ product }) => {
                 ))}
               </div>
             </div>
-            <Button>Add to Cart</Button>
+            <Button
+              onClick={() => {
+                addToCart(info[select], cart_id, jwtToken)
+              }}
+            >
+              Add to Cart
+            </Button>
           </div>
         </PopoverContent>
       </Popover>
