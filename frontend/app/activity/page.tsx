@@ -2,6 +2,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Sidebar } from '../sidebar/page'
+import axios from 'axios'
 
 import {
   Drawer,
@@ -31,102 +32,45 @@ interface Activity {
   time: string,
 }
 
-const Activities: Activity[] = [
-  {
-    id: "1",
-    title: 'Yoga Session',
-    content: 'Join us for a morning yoga session to relax and rejuvenate.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "2",
-    title: 'Cooking Class',
-    content: 'Learn to cook delicious meals with our expert chef.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "3",
-    title: 'Art Workshop',
-    content: 'Unleash your creativity in our art workshop.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "4",
-    title: 'Tech Talk',
-    content: 'Join our tech talk to stay updated on the latest trends in technology.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "5",
-    title: 'Music Concert',
-    content: 'Enjoy live music from our talented local bands.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "6",
-    title: 'Dance Class',
-    content: 'Get moving with our energetic dance class.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "7",
-    title: 'Book Club',
-    content: 'Join our book club to discuss the latest bestsellers.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "8",
-    title: 'Fitness Bootcamp',
-    content: 'Push your limits with our intense fitness bootcamp.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "9",
-    title: 'Gardening Workshop',
-    content: 'Learn the basics of gardening in our hands-on workshop.',
-    time: '2024-06-15T00:00:00Z'
-  },
-  {
-    id: "10",
-    title: 'Photography Walk',
-    content: 'Capture stunning photos in our guided photography walk.',
-    time: '2024-06-15T00:00:00Z'
-  }
-]
-
-async function get_all_activity() {
-  const res = await fetch('http://localhost:3000/api/activity');
-  const activities: Activity[] = await res.json();
-
-  return activities
-}
-
 export default function ActivityPage() {
-  // const [Activities, setActivities] = useState<Activity[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
+  const [Activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //     const fetchActivities = async () => {
-  //         try {
-  //             const data = await get_all_activity();
-  //             setActivities(data);
-  //         } catch (error: unknown) {
-  //             if (error instanceof Error) {
-  //                 setError(error.message);
-  //             } else {
-  //                 setError('An unknown error occurred');
-  //             }
-  //         } finally {
-  //             setLoading(false);
-  //         }
-  //     };
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('jwtToken') || '';
+    console.log(jwtToken)
+    const fetchActivities = async () => {
+      try {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`,
+        };
 
-  //     fetchActivities();
-  // }, []);
+        const start = '1989-06-01';
+        const endDate = new Date();
+        const end = endDate.toISOString().split('T')[0];
+        const params = {
+          start: start,
+          end: end
+        };
 
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>Error: {error}</div>;
+        const res = await axios.get('http://localhost:8080/activities');
+        setActivities(res.data);
+        setLoading(false);
+        console.log('Response:', res.data);
+      } catch (error) {
+        console.error('Error:', error);
+        setError('Failed to fetch activities');
+        setLoading(false);
+      }
+    };
+
+    fetchActivities();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
   return (
     <>
       <Sidebar page='activity' />

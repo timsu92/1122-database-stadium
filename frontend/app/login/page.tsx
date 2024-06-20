@@ -31,7 +31,8 @@ const Login: React.FC = () => {
       } else if (response.status === 200) {
         const { email, role, jwtToken } = response.data
         localStorage.setItem('token', jwtToken)
-        console.log('Logged in user info:', { email, role })
+        console.log('Logged in user info:', { email, role, jwtToken })
+        console.log(localStorage.getItem('token'))
         alert('Logged in success')
         setSuccessLogin(true)
         // router.push('/activity') // Navigate to activity page
