@@ -14,8 +14,8 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [serverError, setServerError] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  //   const router = useRouter()
+  const [successLogin, setSuccessLogin] = useState(false)
+  // const router = useRouter()
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -32,6 +32,8 @@ const Login: React.FC = () => {
         const { email, role, jwtToken } = response.data
         localStorage.setItem('token', jwtToken)
         console.log('Logged in user info:', { email, role })
+        alert('Logged in success')
+        setSuccessLogin(true)
         // router.push('/activity') // Navigate to activity page
       }
     } catch (error) {
@@ -91,20 +93,20 @@ const Login: React.FC = () => {
                 </div>
               </div>
             </div>
-            {/* <Button
+            <Button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Login
-            </Button> */}
-            <Link href="/activity/">
+            </Button>
+            {/* <Link href="/activity/">
               <Button
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Login
               </Button>
-            </Link>
+            </Link> */}
           </form>
           <div className="mt-2 text-center">
             <Link href="/sign_up/">
@@ -115,6 +117,15 @@ const Login: React.FC = () => {
           </div>
           {serverError && (
             <div className="mt-4 text-center text-red-500">{serverError}</div>
+          )}
+          {successLogin && (
+            <div className="mt-2 text-center">
+              <Link href="/activity/">
+                <p className="text-indigo-600 hover:text-indigo-900">
+                  Go to activity
+                </p>
+              </Link>
+            </div>
           )}
         </div>
       </div>
