@@ -17,7 +17,7 @@ import Update from './updateCourse'
 import axios from 'axios'
 import UserCourseList from './userCourseList'
 import { useRouter } from 'next/navigation'
-import { Sidebar } from '../sidebar/page'
+import Sidebar from '../components/SideBar'
 
 export interface Icourse {
   id: string
@@ -62,7 +62,7 @@ export default function Courses() {
       coachEmail: ['cloading...'],
     },
   ])
- 
+
   useEffect(() => {
     setJwtToken(localStorage.getItem('token') as string)
   }, [])
